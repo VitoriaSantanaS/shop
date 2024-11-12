@@ -23,22 +23,25 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
   }
-
-  Future<void> toggleFavorite() async {
- 
-  try {   final response = await http.patch(
- 
-      Uri.parse('${Constants.PRODUCT_BASE_URL}/$id.json'),
-      body: jsonEncode(
-        {'isFavorite': isFavorite},
-      ),
+Future<void> toggleFavorite(String token) async {
+  try {   
+    final oldStatus = isFavorite;
+    _toggleFavorite(); 
+    
+    final response = await http.patch(
+      Uri.parse('${Constants.PRODUCT_BASE_URL}/$id.json?auth=$token'),
+      body: jsonEncode({
+        'isFavorite': isFavorite
+      }),
     );
 
     if (response.statusCode >= 400) {
-      _toggleFavorite();
+      isFavorite = oldStatus;
+      notifyListeners();
     }
-  }catch(error){
-    _toggleFavorite();
+  } catch(error) {
+    isFavorite = !isFavorite;
+    notifyListeners();
   }
 }
 }
