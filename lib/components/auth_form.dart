@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/exceptions/auth_exception.dart';
+import 'package:shop/models/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -35,26 +38,48 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
+  void _showErrorDialog(String msg) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Ocorreu um erro!'),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
+  }
 
-  void _submit() {
-     
-     final isValid = _formkey.currentState?.validate() ?? false;
-     
-      if (!isValid) {
-        return;
-      }
-    setState (() =>_isLoading = true);
-    
+  Future<void> _submit() async {
+    final isValid = _formkey.currentState?.validate() ?? false;
+
+    if (!isValid) {
+      return;
+    }
+    setState(() => _isLoading = true);
+
     _formkey.currentState?.save();
+    Auth auth = Provider.of(context, listen: false);
 
-    if (_isLogin()) {
-      // Logar
-    } else {
-      // Cadastrar
+    try {
+      if (_isLogin()) {
+        await auth.login(_authData['email']!, _authData['password']!);
+      } else {
+        await auth.signup(_authData['email']!, _authData['password']!);
+      }
+    } on AuthException catch (error) {
+      _showErrorDialog(error.toString());
+    } catch (error) {
+      _showErrorDialog('Ocorreu um erro inesperado!');
     }
 
-    setState (() =>_isLoading = false);
-    
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -72,18 +97,19 @@ class _AuthFormState extends State<AuthForm> {
               key: _formkey,
               child: Column(children: [
                 TextFormField(
-                    decoration: const InputDecoration(labelText: 'E-mail'),
-                    keyboardType: TextInputType.emailAddress,
-                    onSaved: (email) {
-                      _authData['email'] = email ?? '';
-                    },
-                    validator: (emailValue) {
-                      final email = emailValue ?? '';
-                      if (email.trim().isEmpty || !email.contains('@')) {
-                        return 'Informe um e-mail valido';
-                      }
-                      return null;
-                    }),
+                  decoration: const InputDecoration(labelText: 'E-mail'),
+                  keyboardType: TextInputType.emailAddress,
+                  onSaved: (email) {
+                    _authData['email'] = email ?? '';
+                  },
+                  validator: (emailValue) {
+                    final email = emailValue ?? '';
+                    if (email.trim().isEmpty || !email.contains('@')) {
+                      return 'Informe um e-mail valido';
+                    }
+                    return null;
+                  },
+                ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Senha'),
                   keyboardType: TextInputType.emailAddress,
