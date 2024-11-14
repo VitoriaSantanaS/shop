@@ -10,12 +10,13 @@ class ProductList with ChangeNotifier {
   final String _token;
   // ignore: prefer_final_fields
   List<Product> _items = [];
+  final String _userId;
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
       _items.where((product) => product.isFavorite).toList();
 
-   ProductList(this._token, this._items);
+   ProductList([this._token = '',  this._userId = '', this._items = const []]);
 
 
   int get itemsCount {
@@ -31,7 +32,6 @@ class ProductList with ChangeNotifier {
           'description': product.description,
           'price': product.price,
           'imageUrl': product.imageUrl,
-          'isFavorite': product.isFavorite
         },
       ),
     );
@@ -119,16 +119,26 @@ class ProductList with ChangeNotifier {
 
     final response =
         await http.get(Uri.parse('${Constants.PRODUCT_BASE_URL}.json?auth=$_token'));
+
     if (response.body == 'null') return;
+
+     final favoriteResponse = await http.get(
+      Uri.parse('${Constants.USER_FAVORITES_URL}/$_userId.json?auth=$_token'),
+      
+    );
+
+    Map<String, dynamic> favoriteData = favoriteResponse.body == 'null' ? {} : jsonDecode(favoriteResponse.body);
+
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((productId, productData) {
+      final isFavorite = favoriteData[productId] is bool ? favoriteData[productId] : false;
       _items.add(Product(
         id: productId,
         name: productData['name'],
         description: productData['description'],
         price: productData['price'],
         imageUrl: productData['imageUrl'],
-        isFavorite: productData['isFavorite'],
+        isFavorite: isFavorite,
       ));
     });
     notifyListeners();
