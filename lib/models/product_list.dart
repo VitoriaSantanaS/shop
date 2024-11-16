@@ -123,15 +123,15 @@ class ProductList with ChangeNotifier {
     if (response.body == 'null') return;
 
      final favoriteResponse = await http.get(
-      Uri.parse('${Constants.USER_FAVORITES_URL}/$_userId.json?auth=$_token'),
-      
+      Uri.parse('${Constants.USER_FAVORITES_URL}/$_userId.json?auth=$_token'), 
     );
 
-    Map<String, dynamic> favoriteData = favoriteResponse.body == 'null' ? {} : jsonDecode(favoriteResponse.body);
+    final Map<String, dynamic> favoriteData = favoriteResponse.body == 'null' ? {} : jsonDecode(favoriteResponse.body);
+ 
+    final Map<String, dynamic> data = jsonDecode(response.body);
 
-    Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((productId, productData) {
-      final isFavorite = favoriteData[productId] is bool ? favoriteData[productId] : false;
+      final isFavorite = favoriteData[productId]?['favorite'] ?? false;
       _items.add(Product(
         id: productId,
         name: productData['name'],
