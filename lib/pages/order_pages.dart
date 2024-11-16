@@ -24,7 +24,7 @@ class OrderPage extends StatelessWidget {
               return const Center(child: Text('Ocorreu um erro!'));
             } else {
               return Consumer<OrderList>(
-                builder: (context, orders, child) =>  ListView.builder(
+                builder: (context, orders, child) => orders.items.isEmpty ? const Center(child: Text('Você ainda não tem nenhum pedido!')) :  ListView.builder(
                   itemCount: orders.itemsCount,
                   itemBuilder: (ctx, i) => OrderWidget(order: orders.items[i]),
                 ),
