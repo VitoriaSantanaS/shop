@@ -22,6 +22,12 @@ class Store {
    }catch(e){
     return {};
    }   
+  } //fiz diferente do professor, pois estava dando erro
+
+ static Future<bool> remove(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.remove(key);
   }
+
 }
 
