@@ -19,6 +19,10 @@ class OrderList with ChangeNotifier {
   int get itemsCount => _items.length;
 
   Future<void> addOrder(Cart cart) async {
+     if (_token.isEmpty) {
+    throw Exception('Token de autenticação não encontrado');
+  }
+
     final date = DateTime.now();
     final response = await http.post(
       Uri.parse('${Constants.ORDER_BASE_URL}/$_userId.json?auth=$_token'),
