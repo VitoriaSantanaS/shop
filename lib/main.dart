@@ -23,53 +23,56 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const Color primaryColor = Color.fromARGB(255, 139, 68, 159);
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
-        ),
-        ChangeNotifierProxyProvider<Auth, ProductList>(
+    return 
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => Auth()),
+          ChangeNotifierProxyProvider<Auth, ProductList>(
             create: (_) => ProductList(),
             update: (ctx, auth, previous) {
               return ProductList(auth.token ?? '', auth.userId ?? '', previous?.items ?? []);
-            }),
+            },
+          ),
         ChangeNotifierProxyProvider<Auth, OrderList>(
           create: (_) => OrderList(),
           update: (context, auth, previous) {
             return OrderList(auth.token ?? '', auth.userId ?? '', previous?.items ?? []);
-          },
-        ),
+            },
+          ),
         ChangeNotifierProvider(
           create: (_) => Cart(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Minha loja',
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            actionsIconTheme: IconThemeData(color: Colors.white),
-            color: primaryColor,
-            titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
           ),
-          colorScheme: ColorScheme.fromSeed(
-            errorContainer: const Color.fromARGB(137, 212, 71, 71),
-            seedColor: primaryColor,
-            primary: primaryColor,
-            secondary: const Color.fromARGB(255, 233, 205, 112),
-          ),
-          fontFamily: 'Lato',
-        ),
-        routes: {
-          AppRoutes.AUTH_OR_HOME: (ctx) => const AuthOrHomePage(),
-          AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
-          AppRoutes.CART: (ctx) => const CartPage(),
-          AppRoutes.ORDER: (ctx) => const OrderPage(),
-          AppRoutes.PRODUCTS: (ctx) => const ProductsPage(),
-          AppRoutes.PRODUCT_FORM: (ctx) => const ProductFormPage(),
-        },
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+         ],
+        child: 
+          MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Minha loja',
+            theme: 
+              ThemeData(
+                fontFamily: 'Lato',
+                appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.white),
+                actionsIconTheme: IconThemeData(color: Colors.white),
+                color: primaryColor,
+                titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+                colorScheme: ColorScheme.fromSeed(
+                errorContainer: const Color.fromARGB(137, 212, 71, 71),
+                seedColor: primaryColor,
+                primary: primaryColor,
+                secondary: const Color.fromARGB(255, 233, 205, 112),
+              ),
+            ),
+            routes: 
+             {
+               AppRoutes.AUTH_OR_HOME: (ctx) => const AuthOrHomePage(),
+               AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
+               AppRoutes.CART: (ctx) => const CartPage(),
+               AppRoutes.ORDER: (ctx) => const OrderPage(),
+               AppRoutes.PRODUCTS: (ctx) => const ProductsPage(),
+               AppRoutes.PRODUCT_FORM: (ctx) => const ProductFormPage(),
+             },
+            ),
+        );
+    }  
   }
-}
