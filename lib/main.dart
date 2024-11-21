@@ -11,6 +11,7 @@ import 'package:shop/pages/product_detail_page.dart';
 import 'package:shop/pages/product_form_page.dart';
 import 'package:shop/pages/pruducts_page.dart';
 import 'package:shop/utils/app_routes.dart';
+import 'package:shop/utils/custom_routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,20 +50,28 @@ class MyApp extends StatelessWidget {
             title: 'Minha loja',
             theme: 
               ThemeData(
+                pageTransitionsTheme: PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CustomPageTransitionsBuilder(),
+                    TargetPlatform.iOS: CustomPageTransitionsBuilder(),
+                  }
+                ),
                 fontFamily: 'Lato',
-                appBarTheme: const AppBarTheme(
-                iconTheme: IconThemeData(color: Colors.white),
-                actionsIconTheme: IconThemeData(color: Colors.white),
-                color: primaryColor,
-                titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-                colorScheme: ColorScheme.fromSeed(
-                errorContainer: const Color.fromARGB(137, 212, 71, 71),
-                seedColor: primaryColor,
-                primary: primaryColor,
-                secondary: const Color.fromARGB(255, 233, 205, 112),
-              ),
-            ),
+                appBarTheme: const 
+                  AppBarTheme(
+                    iconTheme: IconThemeData(color: Colors.white),
+                    actionsIconTheme: IconThemeData(color: Colors.white),
+                    color: primaryColor,
+                    titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                colorScheme: 
+                  ColorScheme.fromSeed(
+                    errorContainer: const Color.fromARGB(137, 212, 71, 71),
+                    seedColor: primaryColor,
+                    primary: primaryColor,
+                    secondary: const Color.fromARGB(255, 233, 205, 112),
+                  ),
+                ),
             routes: 
              {
                AppRoutes.AUTH_OR_HOME: (ctx) => const AuthOrHomePage(),

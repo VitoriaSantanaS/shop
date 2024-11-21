@@ -131,7 +131,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeIn,
             padding: const EdgeInsets.all(16),
-            height: _isLogin() ? 310 : 370,
+            height: _isLogin() ? 310 : 400,
             width: deviceSize.width * 0.75,
             child: 
               Form(
