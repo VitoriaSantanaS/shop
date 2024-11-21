@@ -18,21 +18,15 @@ class _AuthOrHomePageState extends State<AuthOrHomePage> {
   void initState() {
     super.initState();
     Auth auth = Provider.of<Auth>(context, listen: false);
-    auth.tryAutoLogin().then((_) {
-      setState(() {
-        isLoading = false;
-      });
-    });
+    auth.tryAutoLogin().then((_) { setState(() => isLoading = false); });
   }
 
   @override
   Widget build(BuildContext context) {
     Auth auth = Provider.of<Auth>(context);
     
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
+    if (isLoading) return const Center(child: CircularProgressIndicator());
+    
     return auth.isAuth ? const ProductsOverviewPags() : const AuthPage();
   }
 }

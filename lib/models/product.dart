@@ -12,12 +12,15 @@ class Product with ChangeNotifier {
   bool isFavorite;
 
   Product(
-      {required this.id,
-      required this.name,
-      required this.description,
-      required this.price,
-      required this.imageUrl,
-      this.isFavorite = false});
+      {
+        required this.id,
+        required this.name,
+        required this.description,
+        required this.price,
+        required this.imageUrl,
+        this.isFavorite = false
+      }
+    );
 
   void _toggleFavorite() {
     isFavorite = !isFavorite;
@@ -26,19 +29,17 @@ class Product with ChangeNotifier {
 
   Future<void> toggleFavorite(String token, String userId) async {
     try {
-      
       _toggleFavorite();
 
-      final response = await http.put(
-        Uri.parse(
-            '${Constants.USER_FAVORITES_URL}/$userId/$id.json?auth=$token'),
-        body: jsonEncode({'favorite': isFavorite}),
-      );
+      final response = 
+        await http.put(
+          Uri.parse('${Constants.USER_FAVORITES_URL}/$userId/$id.json?auth=$token'),
+          body: jsonEncode({'favorite': isFavorite}),
+        );
 
-      if (response.statusCode >= 400) {
-        _toggleFavorite();
-      }
-    } catch (error) {
+      if (response.statusCode >= 400) { _toggleFavorite(); }
+    } 
+    catch (error) {
       _toggleFavorite();
     }
   }

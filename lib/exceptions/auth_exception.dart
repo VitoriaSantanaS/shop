@@ -1,4 +1,8 @@
 class AuthException implements Exception {
+  final String key;
+  
+  AuthException(this.key);
+  
   static const Map<String, String> errors = {
     'EMAIL_EXISTS': 'E-mail já cadastrado.',
     'OPERATION_NOT_ALLOWED': 'Operação não permitida!',
@@ -7,14 +11,12 @@ class AuthException implements Exception {
     'INVALID_PASSWORD': 'Senha informada não confere.',
     'USER_DISABLED': 'A conta do usuário foi desabilitada.',
     'INVALID_LOGIN_CREDENTIALS': 'E-mail ou senha não conferem.',
-  };
+   };
 
-  final String key;
 
-  AuthException(this.key);
 
   @override
   String toString() {
     return errors[key] ?? 'Ocorreu um erro no processo de autenticação.';
-  }
-}
+   }
+ }

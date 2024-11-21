@@ -25,26 +25,26 @@ class Cart with ChangeNotifier {
 
   void addItem(Product product) {
     if (_items.containsKey(product.id)) {
-      _items.update(
-        product.id,
-        (existingItem) => CartItem(
+      _items.update(product.id, (existingItem) {
+        return CartItem(
           id: existingItem.id,
           productId: product.id,
           name: existingItem.name,
           quantity: existingItem.quantity + 1,
           price: existingItem.price,
-        ),
-      );
+        );
+      });
     } else {
-      _items.putIfAbsent(
-        product.id,
-        () => CartItem(
-          id: Random().nextDouble().toString(),
-          productId: product.id,
-          name: product.name,
-          quantity: 1,
-          price: product.price,
-        ),
+      _items.putIfAbsent(product.id, () {
+        return  
+          CartItem(
+            id: Random().nextDouble().toString(),
+            productId: product.id,
+            name: product.name,
+            quantity: 1,
+            price: product.price,
+          );
+        }
       );
     }
     notifyListeners();
@@ -56,26 +56,27 @@ class Cart with ChangeNotifier {
   }
 
   void removeSingleItem(String productId) {
-    if (!_items.containsKey(productId)) {
-      return;
-    }
-
-    if (_items[productId]?.quantity == 1) {
-      _items.remove(productId);
-    } else {
+    
+    if (!_items.containsKey(productId)) return;
+    
+    if (_items[productId]?.quantity == 1) { _items.remove(productId); } 
+    else {
       _items.update(
         productId,
-        (existingItem) => CartItem(
-          id: existingItem.id,
-          productId: productId,
-          name: existingItem.name,
-          quantity: existingItem.quantity - 1,
-          price: existingItem.price,
-        ),
-      );
-    }
+        (existingItem) { 
+          return 
+            CartItem(
+              id: existingItem.id,
+              productId: productId,
+              name: existingItem.name,
+              quantity: existingItem.quantity - 1,
+              price: existingItem.price,
+            );
+          },
+        );
+      }
     notifyListeners();
-  }
+   }
 
   void clear() {
     _items.clear();
