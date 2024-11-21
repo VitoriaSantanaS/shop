@@ -8,56 +8,44 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: <Widget>[
-          AppBar(
-            title: const Text('Bem vindo Usuário!'),
-            automaticallyImplyLeading: false,
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.shop),
-            title: const Text('Loja'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                AppRoutes.AUTH_OR_HOME,
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: const Text('Pedidos'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                AppRoutes.ORDER,
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Gerenciar Produtos'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                AppRoutes.PRODUCTS,
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text('Sair'),
-            onTap: () {
-               Provider.of<Auth>(context, listen: false).logout();
-              Navigator.of(context).pushReplacementNamed(
-                AppRoutes.AUTH_OR_HOME,
-              );
-            },
-          ),
-        ],
-      ),
-    );
+    return 
+      Drawer(
+        child: 
+          Column(
+            children: <Widget>[
+              AppBar(
+                automaticallyImplyLeading: false,
+                title: const Text('Bem vindo Usuário!'),
+                ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.shop),
+                title: const Text('Loja'),
+                onTap: () => Navigator.of(context).pushReplacementNamed(AppRoutes.AUTH_OR_HOME),
+                ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.payment),
+                title: const Text('Pedidos'),
+                onTap: () => Navigator.of(context).pushReplacementNamed(AppRoutes.ORDER)
+                ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text('Gerenciar Produtos'),
+                onTap: () => Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCTS)
+                ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text('Sair'),
+                onTap: () {
+                  Provider.of<Auth>(context, listen: false).logout();
+                  Navigator.of(context).pushReplacementNamed(AppRoutes.AUTH_OR_HOME);
+                  },
+                ),
+             ],
+            ),
+        );
+    }
   }
-}
